@@ -3,4 +3,4 @@ project(Project3c C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(Project3c main.c)
+add_executable(Project3c my_server.c helper.c helper.h)
