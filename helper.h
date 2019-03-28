@@ -4,7 +4,12 @@
 
 #ifndef PROJECT3C_HELPER_H
 #define PROJECT3C_HELPER_H
-
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <string.h>
+#include <netinet/in.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <stdio.h>
 
 void remove_newline_char(char **str);

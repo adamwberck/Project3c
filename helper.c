@@ -1,9 +1,7 @@
 //
 // Created by mandr on 2019-03-28.
 //
-#include <memory.h>
-#include <stdlib.h>
-#include <cygwin/in.h>
+
 #include "helper.h"
 
 //finds newline char and replaces it with null terminator
@@ -43,7 +41,7 @@ void read_file_as_array(char *array[], FILE *file) {
 
 int open_listen_fd(int port) {
     int listenfd, optval=1;
-    struct sockaddr_in server_address = {0};
+    struct sockaddr_in server_address;
 
     if((listenfd= socket(AF_INET, SOCK_STREAM, 0)) < 0){
         return -1;
