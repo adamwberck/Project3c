@@ -1,6 +1,7 @@
 
 #include <unistd.h>
 #include <stdbool.h>
+#include <pthread.h>
 #include "helper.h"
 #include "my_server.h"
 #include "my_sync_queue.h"
@@ -8,7 +9,9 @@
 struct args{
     char **words;
     struct my_sync_queue *queue;
+    int test;
 };
+struct my_sync_queue socket_queue;
 const char*  DEFAULT_DICTIONARY = "words.txt";
 void *work(void* arguments);
 int main(int argc, char* argv[]) {
@@ -25,13 +28,21 @@ int main(int argc, char* argv[]) {
     read_file_as_array(&words,file);
     fclose(file);
     int i=0;
-    while(words[i]!=NULL){
-        printf("1 %s\n",words[i++]);
+    while(words[i]!=NULL) {
+        printf("1 %s\n", words[i++]);
     }
-    printf("test %d\n",find_in_array(words,"test"));
-    printf("testdfs %d\n",find_in_array(words,"testdfs"));
+    socket_queue = create_sync_queue();
 
-    struct my_sync_queue socket_queue = create_sync_queue();
+    //Pthread
+    pthread_t worker1;
+    struct args arguments;
+    arguments.queue = &socket_queue;
+    arguments.words = words;
+    pthread_create(&worker1,NULL,work,&arguments);
+
+
+
+
     //sockaddr_in holds information about the user connection.
     //We don't need it, but it needs to be passed into accept().
     struct sockaddr_in client;
