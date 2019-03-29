@@ -27,11 +27,13 @@ int count_file_lines(FILE *file) {
     return i;
 }
 
-bool find_in_array(int num, char *array[],char *element){
-    for(int i=0;i<num;i++){
-        if(strcmp(array[i],element)==0){
+bool find_in_array(char **array,char *element){
+    int i=0;
+    while(array[i]!=NULL) {
+        if (strcmp(array[i], element) == 0) {
             return true;
         }
+        i++;
     }
     return false;
 }

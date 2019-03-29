@@ -28,6 +28,8 @@ int main(int argc, char* argv[]) {
     while(words[i]!=NULL){
         printf("1 %s\n",words[i++]);
     }
+    printf("test %d\n",find_in_array(words,"test"));
+    printf("testdfs %d\n",find_in_array(words,"testdfs"));
 
     struct my_sync_queue socket_queue = create_sync_queue();
     //sockaddr_in holds information about the user connection.
@@ -78,7 +80,7 @@ int main(int argc, char* argv[]) {
             remove_newline_char(&input);
             send(client_socket, msg_response, strlen(msg_response), 0);
             send(client_socket, input, (size_t) strlen(input), 0);
-            bool correct  =  find_in_array(line_count,words,input);
+            bool correct  =  find_in_array(words,input);
             const char* correct_str =  correct ? " OK\n" : " NOT OK\n";
             send(client_socket, correct_str, strlen(correct_str), 0);
         }
