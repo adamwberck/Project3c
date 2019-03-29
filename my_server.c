@@ -3,10 +3,14 @@
 #include <stdbool.h>
 #include "helper.h"
 #include "my_server.h"
-struct args{
+#include "my_sync_queue.h"
 
+struct args{
+    char **words;
+    struct my_sync_queue *queue;
 };
 const char*  DEFAULT_DICTIONARY = "words.txt";
+void *work(void* arguments);
 int main(int argc, char* argv[]) {
 
     const char* dictionary = argc <= 2 ? DEFAULT_DICTIONARY : argv[2];
@@ -24,7 +28,8 @@ int main(int argc, char* argv[]) {
     while(words[i]!=NULL){
         printf("1 %s\n",words[i++]);
     }
-    //
+
+    struct my_sync_queue socket_queue = create_sync_queue();
     //sockaddr_in holds information about the user connection.
     //We don't need it, but it needs to be passed into accept().
     struct sockaddr_in client;
@@ -35,13 +40,15 @@ int main(int argc, char* argv[]) {
     recv_buffer[0] = '\0';
 
     int connection_port = (int) (argc < 2 ? 12313 : strtol(argv[1],NULL,10));
-
     connection_socket = open_listen_fd(connection_port);
-
-    if((client_socket = accept(connection_socket, (struct sockaddr*)&client, &clientLen)) == -1){
+    client_socket = accept(connection_socket, (struct sockaddr*)&client, &clientLen);
+    if(client_socket == -1){
         printf("Error connecting to client.\n");
         return -1;
     }
+    add_sq(&socket_queue,client_socket);
+
+
     printf("Connection success!\n");
     char* client_message = "Hello! I hope you can see this.\n";
     char* msg_request = "I'll spell check entered words\n";
@@ -50,10 +57,9 @@ int main(int argc, char* argv[]) {
     char* msg_error = "I didn't get your message. ):\n";
     char* msg_close = "Goodbye!\n";
 
-
-
     send(client_socket, client_message,strlen(client_message),0);
     send(client_socket, msg_request,strlen(msg_request),0);
+
 
     while(1){
         send(client_socket, msg_prompt,strlen(msg_prompt),0);
@@ -78,4 +84,8 @@ int main(int argc, char* argv[]) {
         }
     }
     return 0;
+}
+
+void *work(void* arguments){
+
 }
