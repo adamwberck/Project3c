@@ -7,7 +7,7 @@
 const char*  DEFAULT_DICTIONARY = "words.txt";
 int main(int argc, char* argv[]) {
 
-    const char* dictionary = argc == 1 ? DEFAULT_DICTIONARY : argv[1];
+    const char* dictionary = argc <= 2 ? DEFAULT_DICTIONARY : argv[2];
     FILE *file ;
     file = fopen(dictionary, "r");
     int line_count =count_file_lines(file);
@@ -29,7 +29,7 @@ int main(int argc, char* argv[]) {
     char recv_buffer[BUF_SIZE];
     recv_buffer[0] = '\0';
 
-    int connection_port = 12313;
+    int connection_port = (int) (argc < 2 ? 12313 : strtol(argv[1],NULL,10));
 
     connection_socket = open_listen_fd(connection_port);
 
@@ -62,7 +62,7 @@ int main(int argc, char* argv[]) {
             break;
         }
         else{
-            //PROCCESS INPUT
+            //PROCESS INPUT
             char* input = strdup(recv_buffer);
             remove_newline_char(&input);
             send(client_socket, msg_response, strlen(msg_response), 0);
