@@ -11,9 +11,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 void remove_newline_char(char **str);
 void read_file_as_array(char **array, FILE *file);
 int count_file_lines(FILE *file);
 int open_listen_fd(int port);
+bool find_in_array(int num, char *array[],char *element);
 #endif //PROJECT3C_HELPER_H

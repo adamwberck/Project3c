@@ -27,6 +27,15 @@ int count_file_lines(FILE *file) {
     return i;
 }
 
+bool find_in_array(int num, char *array[],char *element){
+    for(int i=0;i<num;i++){
+        if(strcmp(array[i],element)==0){
+            return true;
+        }
+    }
+    return false;
+}
+
 void read_file_as_array(char *array[], FILE *file) {
     char line[256];
     int i=0;
