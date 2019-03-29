@@ -6,19 +6,18 @@
 #include "my_server.h"
 #include "my_sync_queue.h"
 
-struct args{
-    char **words;
-};
 struct my_sync_queue socket_queue;
+char **words;
+
 const char*  DEFAULT_DICTIONARY = "words.txt";
-void *work(void* arguments);
+void *work();
 int main(int argc, char* argv[]) {
 
     const char* dictionary = argc <= 2 ? DEFAULT_DICTIONARY : argv[2];
     FILE *file ;
     file = fopen(dictionary, "r");
     int line_count = count_file_lines(file);
-    char **words = malloc(sizeof(char**)*(line_count+1));
+    words = malloc(sizeof(char**) * (line_count + 1));
     fclose(file);
 
     //read lines into word array
@@ -33,9 +32,7 @@ int main(int argc, char* argv[]) {
 
     //Pthread
     pthread_t worker1;
-    struct args arguments;
-    arguments.words = words;
-    pthread_create(&worker1,NULL,work,&arguments);
+    pthread_create(&worker1,NULL,work,NULL);
     pthread_join(worker1,NULL);
 
 
@@ -97,9 +94,7 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
-void *work(void* arguments){
-    struct args *args1 = arguments;
-    char **words = args1->words;
+void *work(){
     int i=0;
     while(words[i]!=NULL){
         printf("t %s\n",words[i++]);
