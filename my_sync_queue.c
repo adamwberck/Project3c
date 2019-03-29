@@ -9,6 +9,7 @@ struct my_sync_queue create_sync_queue(){
     queue.read=0;
     queue.write=0;
     queue.size=0;
+    pthread_mutex_init(&queue.job_mutex,NULL);
     return queue;
 }
 
@@ -18,19 +19,30 @@ bool is_empty_sq(struct my_sync_queue *queue){
 
 
 void add_sq(struct my_sync_queue *queue, int element){
-    if(queue->size+1>=LENGTH){
-        printf("Queue OverFlow\n");
-        exit(1);
+    pthread_mutex_lock(&queue->job_mutex);
+    while(queue->size >= LENGTH){
+        pthread_cond_wait(&queue->job_cv2,&queue->job_mutex);
     }
-    //queue->buff[queue->write]=j;
-    queue->write=(queue->write+1)%LENGTH;
-    //char* type = type_string(queue->buff[queue->read].type);
-    queue->size++;
+    //locked
+        queue->buff[queue->write] = element;
+        queue->write=(queue->write+1)%LENGTH;
+        queue->size++;
+    //unlocked
+    pthread_mutex_unlock(&queue->job_mutex);
+    pthread_cond_signal(&queue->job_cv1);
 }
 
 int remove_sq(struct my_sync_queue *queue){
-    int element = queue->buff[queue->read];
-    queue->read = (queue->read+1)%LENGTH;
-    queue->size--;
+    pthread_mutex_lock(&queue->job_mutex);
+    while(queue->size<=0){
+        pthread_cond_wait(&queue->job_cv1,&queue->job_mutex);
+    }
+    //locked
+        int element = queue->buff[queue->read];
+        queue->read = (queue->read+1)%LENGTH;
+        queue->size--;
+    //not locked
+    pthread_mutex_unlock(&queue->job_mutex);
+    pthread_cond_signal(&queue->job_cv2);
     return element;
 }

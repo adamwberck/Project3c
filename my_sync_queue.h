@@ -5,14 +5,17 @@
 #ifndef PROJECT1_GIORGIO_S_DISCRETE_EVENT_SIMULATOR_MY_FIFO_QUEUE_H
 #define PROJECT1_GIORGIO_S_DISCRETE_EVENT_SIMULATOR_MY_FIFO_QUEUE_H
 
-
-#define LENGTH 100
+#include <stdbool.h>
+#include <pthread.h>
+#define LENGTH 2
 
 struct my_sync_queue {
     int buff[LENGTH];
     int read;
     int write;
     int size;
+    pthread_mutex_t job_mutex;
+    pthread_cond_t job_cv1,job_cv2;
 };
 
 bool is_empty_fq(struct my_sync_queue *queue);
