@@ -36,7 +36,8 @@ bool find_in_array(int num, char *array[],char *element){
     return false;
 }
 
-void read_file_as_array(char *array[], FILE *file) {
+void read_file_as_array(char ***p_array, FILE *file) {
+    char** array = *p_array;
     char line[256];
     int i=0;
     while(fgets(line, sizeof(line), file)){//keep going unless end of file
@@ -44,8 +45,9 @@ void read_file_as_array(char *array[], FILE *file) {
         input = malloc(sizeof(char) * strlen(line));
         sprintf(input,"%s", line);
         remove_newline_char(&input);
-        array[i++] = input;
+        array[i++] = strdup(input);
     }
+    array[i]=NULL;
 }
 
 int open_listen_fd(int port) {

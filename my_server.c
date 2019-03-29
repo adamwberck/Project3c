@@ -10,15 +10,18 @@ int main(int argc, char* argv[]) {
     const char* dictionary = argc <= 2 ? DEFAULT_DICTIONARY : argv[2];
     FILE *file ;
     file = fopen(dictionary, "r");
-    int line_count =count_file_lines(file);
-    char* words[line_count];
+    int line_count = count_file_lines(file);
+    char**words = malloc(sizeof(char**)*(line_count+1));
     fclose(file);
 
     //read lines into word array
     file = fopen(dictionary, "r");
-    read_file_as_array(words,file);
+    read_file_as_array(&words,file);
     fclose(file);
-
+    int i=0;
+    while(words){
+        printf("%s\n",words[i++]);
+    }
     //
     //sockaddr_in holds information about the user connection.
     //We don't need it, but it needs to be passed into accept().
