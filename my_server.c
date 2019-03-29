@@ -3,7 +3,9 @@
 #include <stdbool.h>
 #include "helper.h"
 #include "my_server.h"
+struct args{
 
+};
 const char*  DEFAULT_DICTIONARY = "words.txt";
 int main(int argc, char* argv[]) {
 
@@ -11,7 +13,7 @@ int main(int argc, char* argv[]) {
     FILE *file ;
     file = fopen(dictionary, "r");
     int line_count = count_file_lines(file);
-    char**words = malloc(sizeof(char**)*(line_count+1));
+    char **words = malloc(sizeof(char**)*(line_count+1));
     fclose(file);
 
     //read lines into word array
@@ -19,8 +21,8 @@ int main(int argc, char* argv[]) {
     read_file_as_array(&words,file);
     fclose(file);
     int i=0;
-    while(words){
-        printf("%s\n",words[i++]);
+    while(words[i]!=NULL){
+        printf("1 %s\n",words[i++]);
     }
     //
     //sockaddr_in holds information about the user connection.

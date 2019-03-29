@@ -47,7 +47,7 @@ void read_file_as_array(char ***p_array, FILE *file) {
         remove_newline_char(&input);
         array[i++] = strdup(input);
     }
-    array[i]=NULL;
+    array[i]= NULL;
 }
 
 int open_listen_fd(int port) {
