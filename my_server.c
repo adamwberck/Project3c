@@ -8,8 +8,6 @@
 
 struct args{
     char **words;
-    struct my_sync_queue *queue;
-    int test;
 };
 struct my_sync_queue socket_queue;
 const char*  DEFAULT_DICTIONARY = "words.txt";
@@ -36,10 +34,9 @@ int main(int argc, char* argv[]) {
     //Pthread
     pthread_t worker1;
     struct args arguments;
-    arguments.queue = &socket_queue;
     arguments.words = words;
     pthread_create(&worker1,NULL,work,&arguments);
-
+    pthread_join(worker1,NULL);
 
 
 
@@ -96,9 +93,15 @@ int main(int argc, char* argv[]) {
             send(client_socket, correct_str, strlen(correct_str), 0);
         }
     }
+
     return 0;
 }
 
 void *work(void* arguments){
-
+    struct args *args1 = arguments;
+    char **words = args1->words;
+    int i=0;
+    while(words[i]!=NULL){
+        printf("t %s\n",words[i++]);
+    }
 }
