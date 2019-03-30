@@ -18,6 +18,17 @@ void remove_newline_char(char **str){
     }
 }
 
+bool array_in_order(char** array) {
+    int i=0;
+    while(array[i + 1] != NULL){
+        if(strcmp(array[i],array[i+1])>0){
+            return false;
+        }
+        i++;
+    }
+    return true;
+}
+
 int count_file_lines(FILE *file) {
     char line[256];
     int i=0;
@@ -27,7 +38,33 @@ int count_file_lines(FILE *file) {
     return i;
 }
 
-bool find_in_array(char **array,char *element){
+bool find_in_array(char **array,char *element,bool in_order,int size){
+    if(in_order){
+        find_array_b(array,element,0,size);
+    }else{
+        find_array_l(array,element);
+    }
+}
+bool find_array_b(char **array,char *element,int i,int j){
+    if (j >= i) {
+        int mid = i + (j - i) / 2;
+        // check if element is in middle
+        if (strcmp(array[mid],element)==0)
+            return true;
+        // it can only be present in left
+        if (strcmp(array[mid],element)>0) {
+            return find_array_b(array, element, i, mid - 1);
+        // in right
+        }else {
+            return find_array_b(array, element, mid + 1, j);
+        }
+    }
+    //not in array
+    return false;
+}
+
+
+bool find_array_l(char **array,char *element){
     int i=0;
     while(array[i]!=NULL) {
         if (strcmp(array[i], element) == 0) {

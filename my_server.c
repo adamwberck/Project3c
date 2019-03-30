@@ -18,7 +18,8 @@ const char* msg_close = "Goodbye!\n";
 
 struct my_sync_queue socket_queue;
 char **words;
-
+int line_count;
+bool words_in_order;
 const char*  DEFAULT_DICTIONARY = "words.txt";
 void *work();
 
@@ -27,7 +28,7 @@ int main(int argc, char* argv[]) {
     const char* dictionary = argc <= 2 ? DEFAULT_DICTIONARY : argv[2];
     FILE *file ;
     file = fopen(dictionary, "r");
-    int line_count = count_file_lines(file);
+    line_count = count_file_lines(file);
     words = malloc(sizeof(char**) * (line_count + 1));
     fclose(file);
 
@@ -35,6 +36,8 @@ int main(int argc, char* argv[]) {
     file = fopen(dictionary, "r");
     read_file_as_array(&words,file);
     fclose(file);
+    words_in_order = array_in_order(words);
+
     socket_queue = create_sync_queue();
 
     //Pthread
@@ -86,7 +89,7 @@ void *work() {
                 remove_newline_char(&input);
                 send(client_socket, msg_response, strlen(msg_response), 0);
                 send(client_socket, input, (size_t) strlen(input), 0);
-                bool correct = find_in_array(words, input);
+                bool correct = find_in_array(words, input,words_in_order,line_count);
                 const char *correct_str = correct ? " OK\n" : " MISSPELLED\n";
                 send(client_socket, correct_str, strlen(correct_str), 0);
             }

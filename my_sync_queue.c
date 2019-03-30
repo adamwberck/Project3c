@@ -43,7 +43,6 @@ int remove_sq(struct my_sync_queue *queue){
     pthread_mutex_lock(&queue->job_mutex);
     printf("C got the lock\n");
     while(queue->size<=0){
-        printf("C Q size %d\n",queue->size);
         pthread_cond_wait(&queue->job_cv1,&queue->job_mutex);
     }
     printf("C in the queue");

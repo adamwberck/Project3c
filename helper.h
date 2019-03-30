@@ -17,5 +17,8 @@ void remove_newline_char(char **str);
 void read_file_as_array(char ***array, FILE *file);
 int count_file_lines(FILE *file);
 int open_listen_fd(int port);
-bool find_in_array(char **array,char *element);
+bool find_in_array(char **array,char *element,bool in_order,int size);
+bool find_array_b(char **array,char *element,int i,int j);
+bool find_array_l(char **array,char *element);
+bool array_in_order(char** array);
 #endif //PROJECT3C_HELPER_H
