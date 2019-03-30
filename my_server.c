@@ -4,7 +4,8 @@
 #include <pthread.h>
 #include "helper.h"
 #include "my_server.h"
-#include "my_sync_queue.h"
+#include "my_int_sync_queue.h"
+#include "my_str_sync_queue.h"
 #define THREADS 3
 
 const char* client_message = "Hello! I hope you can see this.\n";
@@ -16,12 +17,14 @@ const char* msg_close = "Goodbye!\n";
 
 
 
-struct my_sync_queue socket_queue;
+struct my_int_sync_queue socket_queue;
+struct my_str_sync_queue logger_queue;
 char **words;
 int line_count;
 bool words_in_order;
 const char*  DEFAULT_DICTIONARY = "words.txt";
 void *work();
+void* my_log();
 
 int main(int argc, char* argv[]) {
 
@@ -38,9 +41,17 @@ int main(int argc, char* argv[]) {
     fclose(file);
     words_in_order = array_in_order(words);
 
-    socket_queue = create_sync_queue();
+    //socket_queue = create_int_sync_queue();
 
     //Pthread
+    printf("hi\n");
+    logger_queue = create_str_sync_queue();
+    add_ssq(&logger_queue,"test1");
+    add_ssq(&logger_queue,"test2");
+    printf("LQ: %s\n",remove_ssq(&logger_queue));
+    printf("LQ: %s\n",remove_ssq(&logger_queue));
+    pthread_t logger;
+    //pthread_create(&logger, NULL, my_log, NULL);
     pthread_t workers[THREADS];
     for(int i=0;i<THREADS;i++){
         pthread_create(&workers[i], NULL, work, NULL);
@@ -60,16 +71,15 @@ int main(int argc, char* argv[]) {
             printf("Error connecting to client.\n");
             return -1;
         }
-        add_sq(&socket_queue, client_socket);
+        add_isq(&socket_queue, client_socket);
     }
-
     return 0;
 }
 
 void *work() {
     int m = 0;
     while (m < 100) {
-        int client_socket = remove_sq(&socket_queue);
+        int client_socket = remove_isq(&socket_queue);
         while (1) {
             ssize_t bytes_returned;
             char rec_buffer[BUF_SIZE];
@@ -96,4 +106,8 @@ void *work() {
         m++;
     }
     return NULL;
+}
+
+void* my_log(){
+
 }

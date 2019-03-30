@@ -2,10 +2,10 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "my_sync_queue.h"
+#include "my_str_sync_queue.h"
 
-struct my_sync_queue create_sync_queue(){
-    struct my_sync_queue queue;
+struct my_str_sync_queue create_str_sync_queue(){
+    struct my_str_sync_queue queue;
     queue.read=0;
     queue.write=0;
     queue.size=0;
@@ -15,12 +15,8 @@ struct my_sync_queue create_sync_queue(){
     return queue;
 }
 
-bool is_empty_sq(struct my_sync_queue *queue){
-    return queue->write==queue->read;
-}
 
-
-void add_sq(struct my_sync_queue *queue, int element){
+void add_ssq(struct my_str_sync_queue *queue, char* element){
     printf("Producer about to get the lock...");
     pthread_mutex_lock(&queue->job_mutex);
     printf("P got the lock\n");
@@ -38,7 +34,7 @@ void add_sq(struct my_sync_queue *queue, int element){
     printf("P placed element\n");
 }
 
-int remove_sq(struct my_sync_queue *queue){
+char* remove_ssq(struct my_str_sync_queue *queue){
     printf("Consumer about to get the lock...");
     pthread_mutex_lock(&queue->job_mutex);
     printf("C got the lock\n");
@@ -47,7 +43,7 @@ int remove_sq(struct my_sync_queue *queue){
     }
     printf("C in the queue");
     //locked
-        int element = queue->buff[queue->read];
+        char* element = queue->buff[queue->read];
         queue->read = (queue->read+1)%LENGTH;
         queue->size--;
     //not locked
