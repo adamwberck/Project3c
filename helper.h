@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-void test_array(char **array);
+void print_array(char **array);
 
 void remove_newline_char(char **str);
 void read_file_as_array(char ***array, FILE *file);
