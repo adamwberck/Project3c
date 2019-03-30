@@ -16,13 +16,10 @@ struct my_int_sync_queue create_int_sync_queue(){
 }
 
 void add_isq(struct my_int_sync_queue *queue, int element){
-    printf("Producer about to get the lock...");
     pthread_mutex_lock(&queue->job_mutex);
-    printf("P got the lock\n");
     while(queue->size >= LENGTH){
         pthread_cond_wait(&queue->job_cv2,&queue->job_mutex);
     }
-    printf("P in the queue");
     //locked
         queue->buff[queue->write] = element;
         queue->write=(queue->write+1)%LENGTH;
@@ -30,7 +27,6 @@ void add_isq(struct my_int_sync_queue *queue, int element){
     //unlocked
     pthread_mutex_unlock(&queue->job_mutex);
     pthread_cond_signal(&queue->job_cv1);
-    printf("P placed element\n");
 }
 
 int remove_isq(struct my_int_sync_queue *queue){

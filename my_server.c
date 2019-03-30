@@ -73,7 +73,6 @@ int main(int argc, char* argv[]) {
 }
 
 void *work() {
-    int m = 0;
     while (run_threads) {
         int client_socket = remove_isq(&socket_queue);
         bool connected=true;
@@ -102,18 +101,17 @@ void *work() {
                 add_ssq(&logger_queue, (char *) correct_str);
             }
         }
-        m++;
     }
     return NULL;
 }
 
 void* my_log(){
-    FILE* log_file = fopen("log.txt","w+");
     while(run_threads) {
+        FILE* log_file = fopen("log.txt","a");
         char *string = remove_ssq(&logger_queue);
         printf("about to log %s\n",string);
         fprintf(log_file, "%s", string);
+        fclose(log_file);
     }
-    fclose(log_file);
     return NULL;
 }

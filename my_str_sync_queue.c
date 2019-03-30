@@ -17,13 +17,10 @@ struct my_str_sync_queue create_str_sync_queue(){
 
 
 void add_ssq(struct my_str_sync_queue *queue, char* element){
-    printf("Producer about to get the lock...");
     pthread_mutex_lock(&queue->job_mutex);
-    printf("P got the lock\n");
     while(queue->size >= LENGTH){
         pthread_cond_wait(&queue->job_cv2,&queue->job_mutex);
     }
-    printf("P in the queue");
     //locked
         queue->buff[queue->write] = element;
         queue->write=(queue->write+1)%LENGTH;
@@ -31,17 +28,13 @@ void add_ssq(struct my_str_sync_queue *queue, char* element){
     //unlocked
     pthread_mutex_unlock(&queue->job_mutex);
     pthread_cond_signal(&queue->job_cv1);
-    printf("P placed element\n");
 }
 
 char* remove_ssq(struct my_str_sync_queue *queue){
-    printf("Consumer about to get the lock...");
     pthread_mutex_lock(&queue->job_mutex);
-    printf("C got the lock\n");
     while(queue->size<=0){
         pthread_cond_wait(&queue->job_cv1,&queue->job_mutex);
     }
-    printf("C in the queue");
     //locked
         char* element = queue->buff[queue->read];
         queue->read = (queue->read+1)%LENGTH;
@@ -50,6 +43,5 @@ char* remove_ssq(struct my_str_sync_queue *queue){
 
     pthread_mutex_unlock(&queue->job_mutex);
     pthread_cond_signal(&queue->job_cv2);
-    printf("C got the element\n");
     return element;
 }
