@@ -44,7 +44,7 @@ void read_file_as_array(char ***p_array, FILE *file) {
     int i=0;
     while(fgets(line, sizeof(line), file)){//keep going unless end of file
         char *input;
-        input = malloc(sizeof(char) * strlen(line));
+        input = malloc(sizeof(char) * (strlen(line)+1));
         sprintf(input,"%s", line);
         remove_newline_char(&input);
         array[i++] = strdup(input);

@@ -35,10 +35,6 @@ int main(int argc, char* argv[]) {
     file = fopen(dictionary, "r");
     read_file_as_array(&words,file);
     fclose(file);
-    int i=0;
-    while(words[i]!=NULL) {
-        printf("1 %s\n", words[i++]);
-    }
     socket_queue = create_sync_queue();
 
     //Pthread
@@ -68,6 +64,7 @@ int main(int argc, char* argv[]) {
 }
 
 void *work() {
+    printf("hi worker thread here\n");
     int m = 0;
     while (m < 100) {
         int client_socket = remove_sq(&socket_queue);
