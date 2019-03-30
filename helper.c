@@ -38,6 +38,13 @@ int count_file_lines(FILE *file) {
     return i;
 }
 
+void test_array(char **array){
+    int i=0;
+    while(array[i]!=NULL)
+        printf("%s\n",array[i++]);
+}
+
+
 bool find_in_array(char **array,char *element,bool in_order,int size){
     if(in_order){
         find_array_b(array,element,0,size);
