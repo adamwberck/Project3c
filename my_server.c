@@ -87,7 +87,7 @@ void *work() {
                 send(client_socket, msg_response, strlen(msg_response), 0);
                 send(client_socket, input, (size_t) strlen(input), 0);
                 bool correct = find_in_array(words, input);
-                const char *correct_str = correct ? " OK\n" : " NOT OK\n";
+                const char *correct_str = correct ? " OK\n" : " MISSPELLED\n";
                 send(client_socket, correct_str, strlen(correct_str), 0);
             }
         }
