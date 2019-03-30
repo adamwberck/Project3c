@@ -1,6 +1,6 @@
 #include "my_server.h"
 #define BUF_SIZE 512
-#define THREADS 3
+#define THREADS 2
 #define DEFAULT_DICTIONARY "words.txt"
 #define msg_prompt ">>>"
 #define msg_error "Error message not received\n"
@@ -57,16 +57,17 @@ int main(int argc, char* argv[]) {
     //Setup connection
     struct sockaddr_in client;
     int connection_port = (int) (argc < 2 ? 12313 : strtol(argv[1],NULL,10));
-    int clientLen = sizeof(client);
+    unsigned int client_len = sizeof(client);
     int connection_socket = open_listen_fd(connection_port);
 
     //main thread is now in charge of placing threads in queue
+    printf("Server Started; Now Accepting Connections.\n");
     while(run_threads) {
         //accept gets the socket
-        int client_socket = accept(connection_socket, (struct sockaddr *) &client, &clientLen);
+        int client_socket = accept(connection_socket, (struct sockaddr *) &client, &client_len);
         if (client_socket == -1) {
             printf("Error connecting to client.\n");
-            run_threads=false;
+            run_threads = false;
         }
         //add client to the queue
         add_isq(&socket_queue, client_socket);
