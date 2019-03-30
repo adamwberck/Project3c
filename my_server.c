@@ -1,17 +1,9 @@
-
-#include <unistd.h>
-#include <stdbool.h>
-#include <pthread.h>
-#include "helper.h"
 #include "my_server.h"
-#include "my_int_sync_queue.h"
-#include "my_str_sync_queue.h"
 #define THREADS 3
 #define DEFAULT_DICTIONARY "words.txt"
-
-const char* msg_prompt = ">>>";
-const char* msg_error = "Error message not received\n";
-const char* msg_close = "End Connection!\n";
+#define msg_prompt ">>>"
+#define msg_error "Error message not received\n"
+#define msg_close "End Connection!\n"
 
 
 bool run_threads =true;
@@ -41,14 +33,12 @@ int main(int argc, char* argv[]) {
     words = malloc(sizeof(char**) * (word_count + 1));
 
     //read lines into word array
-    fseek(dictionary_file,0,SEEK_SET);//fseek file back to beginning
+    fseek(dictionary_file,0,SEEK_SET);//fseek() file back to beginning
     read_file_as_array(&words,dictionary_file);
     fclose(dictionary_file);
 
     //check if words are in order for binary search later
     words_in_order = array_in_order(words);
-
-
 
     //Pthread
     //create the logger thread and queue

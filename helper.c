@@ -1,5 +1,5 @@
 //
-// Created by mandr on 2019-03-28.
+// Created by Adam Berck on 2019-03-28.
 //
 
 #include "helper.h"

@@ -1,5 +1,5 @@
 //
-// Created by mandr on 2019-03-28.
+// Created by Adam Berck on 2019-03-28.
 //
 
 #ifndef PROJECT3C_MY_SERVER_H
@@ -10,6 +10,13 @@
 #include <netinet/in.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <stdbool.h>
+#include <pthread.h>
+#include "helper.h"
+
+#include "my_int_sync_queue.h"
+#include "my_str_sync_queue.h"
 #define BUF_SIZE 512
 
 #endif //PROJECT3C_MY_SERVER_H

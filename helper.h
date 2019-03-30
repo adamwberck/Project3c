@@ -1,5 +1,5 @@
 //
-// Created by mandr on 2019-03-28.
+// Created by Adam Berck on 2019-03-28.
 //
 
 #ifndef PROJECT3C_HELPER_H
@@ -14,7 +14,6 @@
 #include <stdbool.h>
 
 void print_array(char **array);
-
 void remove_newline_char(char **str);
 void read_file_as_array(char ***array, FILE *file);
 int count_file_lines(FILE *file);

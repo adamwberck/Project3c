@@ -14,8 +14,8 @@ struct my_int_sync_queue {
     int read;
     int write;
     int size;
-    pthread_mutex_t job_mutex;
-    pthread_cond_t job_cv1,job_cv2;
+    pthread_mutex_t intq_mutex;
+    pthread_cond_t intq_empty,intq_full;
 };
 
 
