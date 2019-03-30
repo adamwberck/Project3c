@@ -1,4 +1,5 @@
 #include "my_server.h"
+#define BUF_SIZE 512
 #define THREADS 3
 #define DEFAULT_DICTIONARY "words.txt"
 #define msg_prompt ">>>"

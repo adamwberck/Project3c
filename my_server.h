@@ -17,6 +17,5 @@
 
 #include "my_int_sync_queue.h"
 #include "my_str_sync_queue.h"
-#define BUF_SIZE 512
 
 #endif //PROJECT3C_MY_SERVER_H
