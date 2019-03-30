@@ -7,13 +7,9 @@
 #include "my_int_sync_queue.h"
 #include "my_str_sync_queue.h"
 #define THREADS 3
-
-const char* client_message = "Hello! I hope you can see this.\n";
-const char* msg_request = "I'll spell check entered words\n";
-const char* msg_response = "Word: ";
 const char* msg_prompt = ">>>";
-const char* msg_error = "I didn't get your message. ):\n";
-const char* msg_close = "Goodbye!\n";
+const char* msg_error = "Error message not received\n";
+const char* msg_close = "End Connection!\n";
 
 
 bool run_threads =true;
@@ -106,10 +102,11 @@ void *work() {
 }
 
 void* my_log(){
+    FILE* log_file = fopen("log.txt","w+");
+    fclose(log_file);
     while(run_threads) {
-        FILE* log_file = fopen("log.txt","a");
+        log_file = fopen("log.txt","a");
         char *string = remove_ssq(&logger_queue);
-        printf("about to log %s\n",string);
         fprintf(log_file, "%s", string);
         fclose(log_file);
     }

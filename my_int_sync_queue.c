@@ -30,21 +30,16 @@ void add_isq(struct my_int_sync_queue *queue, int element){
 }
 
 int remove_isq(struct my_int_sync_queue *queue){
-    printf("Consumer about to get the lock...");
     pthread_mutex_lock(&queue->job_mutex);
-    printf("C got the lock\n");
     while(queue->size<=0){
         pthread_cond_wait(&queue->job_cv1,&queue->job_mutex);
     }
-    printf("C in the queue");
     //locked
         int element = queue->buff[queue->read];
         queue->read = (queue->read+1)%LENGTH;
         queue->size--;
     //not locked
-
     pthread_mutex_unlock(&queue->job_mutex);
     pthread_cond_signal(&queue->job_cv2);
-    printf("C got the element\n");
     return element;
 }
