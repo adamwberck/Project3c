@@ -7,7 +7,7 @@
 
 #include <stdbool.h>
 #include <pthread.h>
-#define LENGTH 2
+#define LENGTH 3
 
 struct my_sync_queue {
     int buff[LENGTH];

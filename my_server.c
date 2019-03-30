@@ -5,6 +5,7 @@
 #include "helper.h"
 #include "my_server.h"
 #include "my_sync_queue.h"
+#define THREADS 3
 
 const char* client_message = "Hello! I hope you can see this.\n";
 const char* msg_request = "I'll spell check entered words\n";
@@ -12,7 +13,6 @@ const char* msg_response = "Word: ";
 const char* msg_prompt = ">>>";
 const char* msg_error = "I didn't get your message. ):\n";
 const char* msg_close = "Goodbye!\n";
-
 
 
 
@@ -41,10 +41,10 @@ int main(int argc, char* argv[]) {
     socket_queue = create_sync_queue();
 
     //Pthread
-    pthread_t worker1;
-    pthread_create(&worker1,NULL,work,NULL);
-
-
+    pthread_t workers[THREADS];
+    for(int i=0;i<THREADS;i++){
+        pthread_create(&workers[i], NULL, work, NULL);
+    }
 
     //sockaddr_in holds information about the user connection.
     //We don't need it, but it needs to be passed into accept().
@@ -67,7 +67,6 @@ int main(int argc, char* argv[]) {
 }
 
 void *work() {
-    printf("hi worker thread here\n");
     int m = 0;
     while (m < 100) {
         int client_socket = remove_sq(&socket_queue);
