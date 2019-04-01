@@ -79,6 +79,7 @@ void *work() {
     while (run_threads) {
         //get client socket from queue
         int client_socket = remove_isq(&socket_queue);
+        printf("FD of socket: %d\n",client_socket);
         bool connected=true;
         while (connected) {
             //get bytes from client
